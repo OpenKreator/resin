@@ -9,3 +9,5 @@ Release/
 *.log
 .DS_Store
 Thumbs.db
+
+.qtcreator/
