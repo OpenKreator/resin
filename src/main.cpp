@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "../include/resin/core/mainwindow.h"
 
 #include <QApplication>
 #include <QSurfaceFormat>

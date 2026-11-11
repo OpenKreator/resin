@@ -19,21 +19,29 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS
 qt_add_executable(Resin
     WIN32 MACOSX_BUNDLE
 
-    # Source files
+    # Main
     src/main.cpp
-    src/mainwindow.cpp
-    src/glwidget.cpp
 
-    # Header files
-    include/mainwindow.h
-    include/glwidget.h
+    # GUI / Core
+    src/core/mainwindow.cpp
+    src/gui/glwidget.cpp
 
-    # UI files
+    # Rendering
+    src/rendering/shaderclass.cpp
+    include/resin/rendering/vbo.h
+    include/resin/rendering/vao.h
+    include/resin/rendering/ebo.h
+    src/rendering/vbo.cpp
+    src/rendering/ebo.cpp
+    src/rendering/vao.cpp
+
+    # Headers
+    include/resin/core/mainwindow.h
+    include/resin/gui/glwidget.h
+    include/resin/rendering/shaderclass.h
+
+    # UI
     ui/mainwindow.ui
-
-    # Shader files
-    src/shaders/vertex.txt
-    src/shaders/fragment.txt
 )
 
 target_link_libraries(Resin

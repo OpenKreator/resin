@@ -1,6 +1,6 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "glwidget.h"
+#include "../include/resin/core/mainwindow.h"
+#include "../ui/ui_mainwindow.h"
+#include "../include/resin/gui/glwidget.h"
 
 #include <QtOpenGLWidgets/QtOpenGLWidgets>
 
@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    setWindowTitle("QT Morning Adventures");
+    setWindowTitle("Resin - 3D Model Painter");
 
     // Create OpenGL Widget
     GLWidget* gLWidget = new GLWidget(this);
