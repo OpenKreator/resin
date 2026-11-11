@@ -2,10 +2,10 @@
 #define GLWIDGET_H
 
 #include <QOpenGLWidget>
-#include <QOpenGLFunctions>
+#include <QOpenGLFunctions_3_3_Core>
 #include <QObject>
 
-class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
+class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
 {
     Q_OBJECT
 public:
@@ -17,8 +17,9 @@ protected:
     void paintGL();
 
 private:
-
-
+    unsigned int vao;
+    unsigned int buffer;
+    unsigned int shader;
 };
 
 #endif // GLWIDGET_H

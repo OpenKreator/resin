@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Create OpenGL Widget
     GLWidget* gLWidget = new GLWidget(this);
 
+    /*
     std::string path = std::string(SHADER_DIR) + "/vertex.txt";
     std::ifstream file(path);
 
@@ -33,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
             std::cout << line << std::endl;
         }
     }
+    */
 
     ui->verticalLayout_2->addWidget(gLWidget);
 }
