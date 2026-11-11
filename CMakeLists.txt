@@ -12,14 +12,28 @@ find_package(OpenGL REQUIRED)
 
 qt_standard_project_setup()
 
+set(CMAKE_AUTOUIC_SEARCH_PATHS
+    ${CMAKE_CURRENT_SOURCE_DIR}/ui
+)
+
 qt_add_executable(Resin
     WIN32 MACOSX_BUNDLE
-    main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    mainwindow.ui
 
-    glwidget.h glwidget.cpp
+    # Source files
+    src/main.cpp
+    src/mainwindow.cpp
+    src/glwidget.cpp
+
+    # Header files
+    include/mainwindow.h
+    include/glwidget.h
+
+    # UI files
+    ui/mainwindow.ui
+
+    # Shader files
+    src/shaders/vertex.txt
+    src/shaders/fragment.txt
 )
 
 target_link_libraries(Resin
@@ -29,6 +43,15 @@ target_link_libraries(Resin
         Qt::OpenGL
         Qt::OpenGLWidgets
         OpenGL::GL
+)
+
+target_include_directories(Resin PRIVATE
+    include
+    ui
+)
+
+target_compile_definitions(Resin PRIVATE
+    SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/shaders"
 )
 
 install(TARGETS Resin
