@@ -14,8 +14,9 @@ public:
     void Activate();
     void Delete();
 
-private:
     unsigned int id;
+
+private:
     QOpenGLFunctions_3_3_Core* gl;
 
     std::string vertexCode;

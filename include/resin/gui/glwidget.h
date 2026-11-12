@@ -26,6 +26,8 @@ private:
     VBO* VBO1 = nullptr;
     EBO* EBO1 = nullptr;
     Shader* shader = nullptr;
+
+    unsigned int uniID;
 };
 
 #endif // GLWIDGET_H

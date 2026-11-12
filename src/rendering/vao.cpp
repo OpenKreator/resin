@@ -10,10 +10,10 @@ VAO::~VAO()
     Delete();
 }
 
-void VAO::LinkVBO(unsigned int index, int count, unsigned int type, bool normalized, int stride, unsigned int offset)
+void VAO::LinkAttrib(unsigned int index, int count, unsigned int type, bool normalized, int stride, unsigned int offset)
 {
     gl->glVertexAttribPointer(index, count, type, normalized ? GL_TRUE : GL_FALSE, stride, reinterpret_cast<const void*>(offset));
-    gl->glEnableVertexAttribArray(0);
+    gl->glEnableVertexAttribArray(index);
 }
 
 void VAO::Bind()

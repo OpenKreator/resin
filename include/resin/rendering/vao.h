@@ -10,7 +10,7 @@ public:
 
     ~VAO();
 
-    void LinkVBO(unsigned int index, int count, unsigned int type, bool normalized, int stride, unsigned int offset);
+    void LinkAttrib(unsigned int index, int count, unsigned int type, bool normalized, int stride, unsigned int offset);
     void Bind();
     void Unbind();
     void Delete();
