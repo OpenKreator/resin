@@ -42,6 +42,10 @@ qt_add_executable(Resin
 
     # UI
     ui/mainwindow.ui
+
+    #shaders
+    src/shaders/default.frag
+    src/shaders/default.vert
 )
 
 target_link_libraries(Resin

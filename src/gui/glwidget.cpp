@@ -50,29 +50,8 @@ void GLWidget::initializeGL()
         5, 4, 1
     };
 
-    std::string vertexShader =
-        "#version 330 core\n"
-        "\n"
-        "layout (location=0) in vec3 aPos;"
-        "\n"
-        "void main()\n"
-        "{\n"
-        "    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-        "}\n";
-
-
-    std::string fragmentShader =
-        "#version 330 core\n"
-        "\n"
-        "out vec4 FragColor;"
-        "\n"
-        "void main()\n"
-        "{\n"
-        "    FragColor = vec4(0.8f,0.3f,0.02f,1.0f);\n"
-        "}\n";
-
     // Shader shader = (ShaderClass.cpp)
-    shader = new Shader(this, vertexShader, fragmentShader);
+    shader = new Shader(this, "default.vert", "default.frag");
 
     // Vertex and buffer arrays
     VAO1 = new VAO(this);

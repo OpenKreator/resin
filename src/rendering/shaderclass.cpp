@@ -1,9 +1,16 @@
 #include "../include/resin/rendering/shaderclass.h"
 
-/*
-std::string get_file_contents(const char* filename)
+#include <iostream>
+#include <fstream>
+// #include <sstream>
+#include <string>
+
+std::string Shader::get_file_contents(const char* filename)
 {
-    std::ifstream in(filename, std::ios::binary);
+    // Learn more on this and make it more efficient
+    // std::cout << "Tried to get content from: " << filename << std::endl;
+    std::string path = std::string(SHADER_DIR) + "/" + filename;
+    std::ifstream in(path, std::ios::binary);
     if (in)
     {
         std::string contents;
@@ -16,11 +23,18 @@ std::string get_file_contents(const char* filename)
     }
     throw(errno);
 }
-*/
 
-Shader::Shader(QOpenGLFunctions_3_3_Core* gl, const std::string& vertexShader, const std::string& fragmentShader): id(0), gl(gl)
+Shader::Shader(QOpenGLFunctions_3_3_Core* gl, const char* vertexFile, const char* fragmentFile): id(0), gl(gl)
 {
-    id = CreateShader(vertexShader, fragmentShader);
+    // Read vertexFile and fragmentFile and store the strings
+    vertexCode = get_file_contents(vertexFile);
+    fragmentCode = get_file_contents(fragmentFile);
+
+    // Convert the shader source strings into character arrays
+    // const char* vertexSource = vertexCode.c_str();
+    // const char* fragmentSource = fragmentCode.c_str();
+
+    id = CreateShader(vertexCode, fragmentCode);
 }
 
 Shader::~Shader()
