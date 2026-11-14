@@ -28,6 +28,7 @@ private:
     Shader* shader = nullptr;
 
     unsigned int uniID;
+    unsigned int texture;
 };
 
 #endif // GLWIDGET_H

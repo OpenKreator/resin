@@ -24,9 +24,9 @@ qt_add_executable(Resin
 
     # GUI / Core
     src/core/mainwindow.cpp
-    src/gui/glwidget.cpp
 
     # Rendering
+    src/rendering/glwidget.cpp
     src/rendering/shaderclass.cpp
     include/resin/rendering/vbo.h
     include/resin/rendering/vao.h
@@ -34,18 +34,20 @@ qt_add_executable(Resin
     src/rendering/vbo.cpp
     src/rendering/ebo.cpp
     src/rendering/vao.cpp
+    include/stb/stb_image.h
 
     # Headers
     include/resin/core/mainwindow.h
-    include/resin/gui/glwidget.h
+    include/resin/rendering/glwidget.h
     include/resin/rendering/shaderclass.h
 
     # UI
     ui/mainwindow.ui
 
-    #shaders
-    src/shaders/default.frag
-    src/shaders/default.vert
+    #shaders + textures
+    resources/shaders/default.frag
+    resources/shaders/default.vert
+    src/rendering/stb.cpp
 )
 
 target_link_libraries(Resin
@@ -63,7 +65,8 @@ target_include_directories(Resin PRIVATE
 )
 
 target_compile_definitions(Resin PRIVATE
-    SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/src/shaders"
+    SHADER_DIR="${CMAKE_SOURCE_DIR}/resources/shaders"
+    TEXTURE_DIR="${CMAKE_SOURCE_DIR}/resources/textures"
 )
 
 install(TARGETS Resin

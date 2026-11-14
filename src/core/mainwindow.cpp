@@ -1,6 +1,6 @@
 #include "../include/resin/core/mainwindow.h"
 #include "../ui/ui_mainwindow.h"
-#include "../include/resin/gui/glwidget.h"
+#include "../include/resin/rendering/glwidget.h"
 
 #include <QtOpenGLWidgets/QtOpenGLWidgets>
 
