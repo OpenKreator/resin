@@ -48,6 +48,8 @@ qt_add_executable(Resin
     resources/shaders/default.frag
     resources/shaders/default.vert
     src/rendering/stb.cpp
+    include/resin/rendering/texture.h
+    src/rendering/texture.cpp
 )
 
 target_link_libraries(Resin

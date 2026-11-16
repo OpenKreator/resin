@@ -1,7 +1,6 @@
 #include "../include/resin/rendering/glwidget.h"
 
 #include <iostream>
-#include<stb/stb_image.h>
 
 GLWidget::GLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
@@ -19,7 +18,7 @@ GLWidget::~GLWidget()
     delete VBO1;
     delete EBO1;
 
-    glDeleteTextures(1, &texture);
+    delete popCat;
 
     doneCurrent();
 }
@@ -73,43 +72,9 @@ void GLWidget::initializeGL()
 
     uniID = glGetUniformLocation(shader->id, "scale");
 
-    int widthImg, heightImg, numColCh;
-    stbi_set_flip_vertically_on_load(true);
+    // Texture
     std::string path = std::string(TEXTURE_DIR) + "/" + "pop_cat.jpg";
-    unsigned char* bytes = stbi_load(path.c_str(), &widthImg, &heightImg, &numColCh, 0);
-
-    if (!bytes)
-    {
-        std::cerr << "Failed to load texture: "
-                  << path << std::endl;
-
-        std::cerr << "Reason: "
-                  << stbi_failure_reason() << std::endl;
-
-        return;
-    }
-
-    glGenTextures(1, &texture);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, widthImg, heightImg, 0, GL_RGB, GL_UNSIGNED_BYTE, bytes);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    stbi_image_free(bytes);
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    unsigned int tex0uni = glGetUniformLocation(shader->id, "tex0");
-    shader->Activate();
-    glUniform1i(tex0uni, 0);
+    popCat = new Texture(this, path.c_str(), GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE);
 }
 
 void GLWidget::paintGL()
@@ -128,7 +93,7 @@ void GLWidget::paintGL()
     shader->Activate();
 
     glUniform1f(uniID, 0.5f);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    popCat->Bind();
 
     VAO1->Bind();
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

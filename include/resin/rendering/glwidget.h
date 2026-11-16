@@ -6,6 +6,7 @@
 #include <QObject>
 
 #include "../include/resin/rendering/shaderclass.h"
+#include "../include/resin/rendering/texture.h"
 #include "../include/resin/rendering/vbo.h"
 #include "../include/resin/rendering/ebo.h"
 #include "../include/resin/rendering/vao.h"
@@ -26,6 +27,8 @@ private:
     VBO* VBO1 = nullptr;
     EBO* EBO1 = nullptr;
     Shader* shader = nullptr;
+
+    Texture* popCat = nullptr;
 
     unsigned int uniID;
     unsigned int texture;
