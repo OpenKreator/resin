@@ -3,6 +3,7 @@
 #include "../include/resin/rendering/glwidget.h"
 
 #include <QtOpenGLWidgets/QtOpenGLWidgets>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     GLWidget* gLWidget = new GLWidget(this);
 
     ui->verticalLayout_2->addWidget(gLWidget);
+    std::cout << __cplusplus << std::endl;
 }
 
 MainWindow::~MainWindow()
