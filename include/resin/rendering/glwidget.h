@@ -4,6 +4,7 @@
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions_3_3_Core>
 #include <QObject>
+#include <QTimer>
 
 #include "../include/resin/rendering/shaderclass.h"
 #include "../include/resin/rendering/texture.h"
@@ -21,6 +22,7 @@ public:
 protected:
     void initializeGL();
     void paintGL();
+    // void resizeGL(int w, int h);
 
 private:
     VAO* VAO1 = nullptr;
@@ -32,6 +34,9 @@ private:
 
     unsigned int uniID;
     unsigned int texture;
+
+    QTimer* timer;
+    float rotation = 0.0f;
 };
 
 #endif // GLWIDGET_H
