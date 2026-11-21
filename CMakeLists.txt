@@ -54,6 +54,8 @@ qt_add_executable(Resin
     src/rendering/stb.cpp
     include/resin/rendering/texture.h
     src/rendering/texture.cpp
+    include/resin/rendering/camera.h
+    src/rendering/camera.cpp
 )
 
 target_link_libraries(Resin

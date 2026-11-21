@@ -5,9 +5,14 @@
 #include <QOpenGLFunctions_3_3_Core>
 #include <QObject>
 #include <QTimer>
+#include <QSet>
+#include <QKeyEvent>
+#include <QMouseEvent>
+#include <QCursor>
 
 #include "../include/resin/rendering/shaderclass.h"
 #include "../include/resin/rendering/texture.h"
+#include "../include/resin/rendering/camera.h"
 #include "../include/resin/rendering/vbo.h"
 #include "../include/resin/rendering/ebo.h"
 #include "../include/resin/rendering/vao.h"
@@ -24,6 +29,12 @@ protected:
     void paintGL();
     // void resizeGL(int w, int h);
 
+    void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent* event);
+    void mousePressEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent* event);
+
 private:
     VAO* VAO1 = nullptr;
     VBO* VBO1 = nullptr;
@@ -32,11 +43,17 @@ private:
 
     Texture* popCat = nullptr;
 
-    unsigned int uniID;
     unsigned int texture;
 
     QTimer* timer;
     float rotation = 0.0f;
+
+    Camera* camera = nullptr;
+
+    QSet<int> keys;
+
+    bool mouseLook = false;
+    bool firstClick = true;
 };
 
 #endif // GLWIDGET_H
