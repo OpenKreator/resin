@@ -9,6 +9,7 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QCursor>
+#include <QWheelEvent>
 
 #include "../include/resin/rendering/shaderclass.h"
 #include "../include/resin/rendering/texture.h"
@@ -29,11 +30,13 @@ protected:
     void paintGL();
     // void resizeGL(int w, int h);
 
+    // Event voids
     void keyPressEvent(QKeyEvent* event);
     void keyReleaseEvent(QKeyEvent* event);
     void mousePressEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
+    void wheelEvent(QWheelEvent* event);
 
 private:
     VAO* VAO1 = nullptr;
@@ -53,7 +56,10 @@ private:
     QSet<int> keys;
 
     bool mouseLook = false;
-    bool firstClick = true;
+    QPoint lastMousePos;
+    void CenterCursor();
+    bool ignoreNextMouseMove = false;
+    bool ignoreWarpEvent = false;
 };
 
 #endif // GLWIDGET_H

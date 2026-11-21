@@ -21,6 +21,12 @@ public:
     glm::vec3 Position;
     glm::vec3 Orientation = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 WorldUp = glm::vec3(0, 1, 0);
+    glm::vec3 Pivot = glm::vec3(0.0f);
+
+    float Distance = 5.0f;
+    float Yaw = 0.0f;
+    float Pitch = 0.0f;
 
     int width;
     int height;
@@ -29,8 +35,11 @@ public:
     float sensitivity = 100.0f;
 
     void Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform);
-    void Inputs(QSet<int> keys);
+    // void Inputs(QSet<int> keys);
+
     void MouseInputs(float mouseX, float mouseY);
+    void UpdateOrbit();
+    void MouseScroll(float scrollY);
 
 private:
     QOpenGLFunctions_3_3_Core* gl;
