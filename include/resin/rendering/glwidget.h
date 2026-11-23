@@ -28,7 +28,7 @@ public:
 protected:
     void initializeGL();
     void paintGL();
-    // void resizeGL(int w, int h);
+    void resizeGL(int w, int h);
 
     // Event voids
     void keyPressEvent(QKeyEvent* event);

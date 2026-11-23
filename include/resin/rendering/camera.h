@@ -24,7 +24,7 @@ public:
     glm::vec3 WorldUp = glm::vec3(0, 1, 0);
     glm::vec3 Pivot = glm::vec3(0.0f);
 
-    float Distance = 5.0f;
+    float Distance = 2.0f;
     float Yaw = 0.0f;
     float Pitch = 0.0f;
 
@@ -40,6 +40,8 @@ public:
     void MouseInputs(float mouseX, float mouseY);
     void UpdateOrbit();
     void MouseScroll(float scrollY);
+    void Resize(int width, int height);
+
 
 private:
     QOpenGLFunctions_3_3_Core* gl;
