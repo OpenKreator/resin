@@ -11,6 +11,7 @@ GLWidget::GLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
 {
     setFocusPolicy(Qt::StrongFocus);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     timer = new QTimer(this);
 
@@ -33,6 +34,15 @@ GLWidget::~GLWidget()
     delete camera;
 
     doneCurrent();
+}
+
+void GLWidget::resizeGL(int w, int h){
+    glViewport(0,0,w,h);
+
+    if (camera)
+    {
+        camera->Resize(w,h);
+    }
 }
 
 void GLWidget::initializeGL()
@@ -107,7 +117,7 @@ void GLWidget::paintGL()
 
     shader->Activate();
 
-    camera->Inputs(keys);
+    //camera->Inputs(keys);
     camera->Matrix(45.0f, 0.1f, 100.0f, *shader, "camMatrix");
 
     popCat->Bind();
@@ -131,17 +141,24 @@ void GLWidget::mousePressEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton)
     {
         mouseLook = true;
-
-        // Hide the cursor
         setCursor(Qt::BlankCursor);
-
-        // Prevent camera from jumping on the first click
-        if (firstClick)
-        {
-            QCursor::setPos(mapToGlobal(rect().center()));
-            firstClick = false;
-        }
+        QCursor::setPos(mapToGlobal(rect().center()));
     }
+}
+
+void GLWidget::mouseMoveEvent(QMouseEvent*)
+{
+    if (!mouseLook)
+        return;
+
+    const QPoint globalCenter = mapToGlobal(rect().center());
+    const QPoint delta = QCursor::pos() - globalCenter;
+
+    if (delta.isNull())   // stale or warp-generated event
+        return;
+
+    camera->MouseInputs(delta.x(), delta.y());
+    QCursor::setPos(globalCenter);
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent* event)
@@ -150,31 +167,15 @@ void GLWidget::mouseReleaseEvent(QMouseEvent* event)
     {
         mouseLook = false;
 
-        // Show the cursor again
         unsetCursor();
-
-        // Prepare for the next click
-        firstClick = true;
     }
 }
 
-void GLWidget::mouseMoveEvent(QMouseEvent* event)
+void GLWidget::wheelEvent(QWheelEvent* event)
 {
-    if (!mouseLook)
-        return;
+    float scroll = event->angleDelta().y() / 120.0f;
 
-    // Get the center of the widget
-    QPoint center = rect().center();
-
-    // Calculate mouse offset from the center
-    float mouseX = event->position().x() - center.x();
-    float mouseY = event->position().y() - center.y();
-
-    // Rotate the camera
-    camera->MouseInputs(mouseX, mouseY);
-
-    // Move cursor back to the center
-    QCursor::setPos(mapToGlobal(center));
+    camera->MouseScroll(scroll);
 
     update();
 }

@@ -20,6 +20,10 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}/ui
 )
 
+# Qt Advanced Docking System
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+add_subdirectory(external/Qt-Advanced-Docking-System)
+
 qt_add_executable(Resin
     WIN32 MACOSX_BUNDLE
 
@@ -65,6 +69,7 @@ target_link_libraries(Resin
         Qt::OpenGL
         Qt::OpenGLWidgets
         OpenGL::GL
+        ads::qtadvanceddocking
 )
 
 target_include_directories(Resin PRIVATE
