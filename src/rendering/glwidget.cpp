@@ -30,6 +30,11 @@ GLWidget::~GLWidget()
     delete VBO1;
     delete EBO1;
 
+    delete lightShader;
+    delete lightVAO;
+    delete lightVBO;
+    delete lightEBO;
+
     delete popCat;
     delete camera;
 
@@ -61,47 +66,117 @@ void GLWidget::initializeGL()
 
     // Vertices coordinates
     GLfloat vertices[] =
-        { //     COORDINATES     /        COLORS      /   TexCoord  //
-            -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
-            -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
-            0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	0.0f, 0.0f,
-            0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	5.0f, 0.0f,
-            0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	2.5f, 5.0f
+        { //     COORDINATES     /        COLORS          /    TexCoord   /        NORMALS       //
+            -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+            -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+            0.5f, 0.0f, -0.5f,      0.83f, 0.70f, 0.44f,	 5.0f, 5.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+            0.5f, 0.0f,  0.5f,      0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, -1.0f, 0.0f, // Bottom side
+
+            -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
+            -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
+            0.0f, 0.8f,  0.0f,      0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,     -0.8f, 0.5f,  0.0f, // Left Side
+
+            -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+            0.5f, 0.0f, -0.5f,      0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+            0.0f, 0.8f,  0.0f,      0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f, -0.8f, // Non-facing side
+
+            0.5f, 0.0f, -0.5f,      0.83f, 0.70f, 0.44f,	 0.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
+            0.5f, 0.0f,  0.5f,      0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.8f, 0.5f,  0.0f, // Right side
+            0.0f, 0.8f,  0.0f,      0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.8f, 0.5f,  0.0f, // Right side
+
+            0.5f, 0.0f,  0.5f,      0.83f, 0.70f, 0.44f,	 5.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
+            -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.0f,      0.0f, 0.5f,  0.8f, // Facing side
+            0.0f, 0.8f,  0.0f,      0.92f, 0.86f, 0.76f,	 2.5f, 5.0f,      0.0f, 0.5f,  0.8f  // Facing side
         };
 
     // Indices for vertices order
     GLuint indices[] =
         {
-            0, 1, 2,
-            0, 2, 3,
-            0, 1, 4,
-            1, 2, 4,
-            2, 3, 4,
-            3, 0, 4
+            0, 1, 2, // Bottom side
+            0, 2, 3, // Bottom side
+            4, 6, 5, // Left side
+            7, 9, 8, // Non-facing side
+            10, 12, 11, // Right side
+            13, 15, 14 // Facing side
         };
 
-    // Shader shader = (ShaderClass.cpp)
-    shader = new Shader(this, "default.vert", "default.frag");
+    GLfloat lightVertices[] =
+        { //     COORDINATES     //
+            -0.1f, -0.1f,  0.1f,
+            -0.1f, -0.1f, -0.1f,
+            0.1f, -0.1f, -0.1f,
+            0.1f, -0.1f,  0.1f,
+            -0.1f,  0.1f,  0.1f,
+            -0.1f,  0.1f, -0.1f,
+            0.1f,  0.1f, -0.1f,
+            0.1f,  0.1f,  0.1f
+        };
 
-    // Vertex and buffer arrays
+    GLuint lightIndices[] =
+        {
+            0, 1, 2,
+            0, 2, 3,
+            0, 4, 7,
+            0, 7, 3,
+            3, 7, 6,
+            3, 6, 2,
+            2, 6, 5,
+            2, 5, 1,
+            1, 5, 4,
+            1, 4, 0,
+            4, 5, 6,
+            4, 6, 7
+        };
+
+    // Pyramid
+    shader = new Shader(this, "default.vert", "default.frag");
     VAO1 = new VAO(this);
     VBO1 = new VBO(this, vertices, sizeof(vertices));
     EBO1 = new EBO(this, indices, sizeof(indices));
-
     VAO1->Bind();
     VBO1->Bind();
     EBO1->Bind();
-
-    VAO1->LinkAttrib(0, 3, GL_FLOAT, false, 8 * sizeof(float), 0);
-    VAO1->LinkAttrib(1, 3, GL_FLOAT, false, 8 * sizeof(float), (3 * sizeof(float)));
-    VAO1->LinkAttrib(2, 2, GL_FLOAT, false, 8 * sizeof(float), (6 * sizeof(float)));
-
+    VAO1->LinkAttrib(0, 3, GL_FLOAT, false, 11 * sizeof(float), 0);
+    VAO1->LinkAttrib(1, 3, GL_FLOAT, false, 11 * sizeof(float), (3 * sizeof(float)));
+    VAO1->LinkAttrib(2, 2, GL_FLOAT, false, 11 * sizeof(float), (6 * sizeof(float)));
+    VAO1->LinkAttrib(3, 3, GL_FLOAT, false, 11 * sizeof(float), (8 * sizeof(float)));
     VAO1->Unbind();
     VBO1->Unbind();
     EBO1->Unbind();
 
+    // Light
+    lightShader = new Shader(this, "light.vert", "light.frag");
+    lightVAO = new VAO(this);
+    lightVBO = new VBO(this, lightVertices, sizeof(lightVertices));
+    lightEBO = new EBO(this, lightIndices, sizeof(lightIndices));
+    lightVAO->Bind();
+    lightVBO->Bind();
+    lightEBO->Bind();
+    lightVAO->LinkAttrib(0, 3, GL_FLOAT, false, 3 * sizeof(float), 0);
+    lightVAO->Unbind();
+    lightVBO->Unbind();
+    lightEBO->Unbind();
+
+    glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+    glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
+    glm::mat4 lightModel = glm::mat4(1.0f);
+    lightModel = glm::translate(lightModel, lightPos);
+
+    glm::vec3 pyramidPos = glm::vec3(0.0f);
+    glm::mat4 pyramidModel = glm::mat4(1.0f);
+    pyramidModel = glm::translate(pyramidModel, pyramidPos);
+
+    lightShader->Activate();
+    glUniformMatrix4fv(glGetUniformLocation(lightShader->id, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
+    glUniform4f(glGetUniformLocation(lightShader->id, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+    shader->Activate();
+    glUniformMatrix4fv(glGetUniformLocation(shader->id, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
+    glUniform4f(glGetUniformLocation(shader->id, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+    glUniform3f(glGetUniformLocation(shader->id, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
+
     // Texture
-    std::string path = std::string(TEXTURE_DIR) + "/" + "pop_cat.jpg";
+    std::string path = std::string(TEXTURE_DIR) + "/" + "brick.png";
     popCat = new Texture(this, path.c_str(), GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE);
 
     glEnable(GL_DEPTH_TEST);
@@ -115,16 +190,19 @@ void GLWidget::paintGL()
     // Set every pixel in the fram buffer to the current clear color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    shader->Activate();
-
     //camera->Inputs(keys);
     camera->UpdateMatrix(45.0f, 0.1f, 100.0f);
+
+    shader->Activate();
     camera->Matrix(*shader, "camMatrix");
-
     popCat->Bind();
-
     VAO1->Bind();
     glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
+
+    lightShader->Activate();
+    camera->Matrix(*lightShader, "camMatrix");
+    lightVAO->Bind();
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 }
 
 void GLWidget::keyPressEvent(QKeyEvent* event)

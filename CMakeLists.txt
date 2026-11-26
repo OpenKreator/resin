@@ -55,6 +55,8 @@ qt_add_executable(Resin
     #shaders + textures
     resources/shaders/default.frag
     resources/shaders/default.vert
+    resources/shaders/light.frag
+    resources/shaders/light.vert
     src/rendering/stb.cpp
     include/resin/rendering/texture.h
     src/rendering/texture.cpp

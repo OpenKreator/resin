@@ -44,6 +44,11 @@ private:
     EBO* EBO1 = nullptr;
     Shader* shader = nullptr;
 
+    VAO* lightVAO = nullptr;
+    VBO* lightVBO = nullptr;
+    EBO* lightEBO = nullptr;
+    Shader* lightShader = nullptr;
+
     Texture* popCat = nullptr;
 
     unsigned int texture;
