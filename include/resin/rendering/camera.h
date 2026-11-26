@@ -23,6 +23,7 @@ public:
     glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 WorldUp = glm::vec3(0, 1, 0);
     glm::vec3 Pivot = glm::vec3(0.0f);
+    glm::mat4 cameraMatrix = glm::mat4(1.0f);
 
     float Distance = 2.0f;
     float Yaw = 0.0f;
@@ -34,7 +35,9 @@ public:
     float speed = 0.1f;
     float sensitivity = 100.0f;
 
-    void Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform);
+    // void Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform);
+    void UpdateMatrix(float FOVdeg, float nearPlane, float farPlane);
+    void Matrix(Shader& shader, const char* uniform);
     // void Inputs(QSet<int> keys);
 
     void MouseInputs(float mouseX, float mouseY);
