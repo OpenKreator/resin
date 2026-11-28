@@ -157,8 +157,10 @@ void GLWidget::initializeGL()
     lightVBO->Unbind();
     lightEBO->Unbind();
 
+    // We create a light color here
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
+    // Light objecr and transformations
     glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
     glm::mat4 lightModel = glm::mat4(1.0f);
     lightModel = glm::translate(lightModel, lightPos);
@@ -167,6 +169,7 @@ void GLWidget::initializeGL()
     glm::mat4 pyramidModel = glm::mat4(1.0f);
     pyramidModel = glm::translate(pyramidModel, pyramidPos);
 
+    // Shader and setup
     lightShader->Activate();
     glUniformMatrix4fv(glGetUniformLocation(lightShader->id, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
     glUniform4f(glGetUniformLocation(lightShader->id, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
